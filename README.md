@@ -12,3 +12,9 @@ If your group number is a single digit, i.e 2024-Team1 is fine as well.)
 The other members in the team will be able to see an existing team with your team number in the “Join an existing team” section. Click Join.
 
 ## Step 3. All of you should be able to see the acceptance page. Click on the assignment link to see the project on GitHub.
+
+# Milestone Submission Instructions
+In the repository of your team, tag the submitted commit with a tag name “ms1” (meaning milestone 1). 
+1. Create a tag, e.g., git tag -a ms1 -m “Milestone 1”
+2. Push the created tag into the repository, e.g., git push origin ms1
+3. More details are in: http://git-scm.com/book/en/v2/Git-Basics-Tagging
