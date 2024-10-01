@@ -47,7 +47,7 @@
     "sonarqube-scanner": "^3.3.0"
   },
   "jest": {
-    "testEnvironment": "node",
+    "testEnvironment": "jest-environment-jsdom",
     "transform": {
       "\\.js$": "<rootDir>/node_modules/babel-jest"
     },
@@ -56,6 +56,7 @@
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!(styleMock\\.js)$)"
-    ]
+    ],
+    "setupFilesAfterEnv": ["./jest.setup.js"]
   }
 }
