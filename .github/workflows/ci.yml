@@ -47,8 +47,11 @@ jobs:
           node-version: "21"
 
       # Step 3: Install dependencies
-      - name: Install dependencies
+      - name: Install dependencies on backend
         run: npm install
+
+      - name: Install dependencies on frontend
+        run: ./client/npm install
 
       # Step 4: Set up environment variables from GitHub Secrets
     #   - name: Setup environment variables
