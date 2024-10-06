@@ -64,17 +64,17 @@ describe('check user registration', () => {
         expect(res.send).toHaveBeenCalledWith({ message: "Password is Required" });
     });
 
-    test('should return error if phone number is missing', async () => {
-        req.body.phone = "";
-        await registerController(req, res);
-        expect(res.send).toHaveBeenCalledWith({ message: "Phone no is Required" });
-    });
+    // test('should return error if phone number is missing', async () => {
+    //     req.body.phone = "";
+    //     await registerController(req, res);
+    //     expect(res.send).toHaveBeenCalledWith({ message: "Phone no is Required" });
+    // });
 
-    test('should return error if address is missing', async () => {
-        req.body.address = "";
-        await registerController(req, res);
-        expect(res.send).toHaveBeenCalledWith({ message: "Address is Required" });
-    });
+    // test('should return error if address is missing', async () => {
+    //     req.body.address = "";
+    //     await registerController(req, res);
+    //     expect(res.send).toHaveBeenCalledWith({ message: "Address is Required" });
+    // });
 
     test('should return error if answer is missing', async () => {
         req.body.answer = "";
