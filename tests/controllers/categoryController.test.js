@@ -1,4 +1,4 @@
-import { createCategoryController, updateCategoryController, deleteCategoryCOntroller } from '../../controllers/categoryController';
+import { createCategoryController, updateCategoryController, deleteCategoryCOntroller, categoryControlller, singleCategoryController } from '../../controllers/categoryController';
 import categoryModel from '../../models/categoryModel';
 import slugify from 'slugify';
 
@@ -186,4 +186,138 @@ describe('createCategoryController', () => {
         error: errorMessage,
       });
     });
+  });
+
+  describe("categoryController", () => {
+    beforeEach(() => {
+      categoryModel.find.mockReturnValue([
+        {_id: 1, name: "Category A", slug: "categoryA"},
+        {_id: 2, name: "Category B", slug: "categoryB"},
+    ]);
+    })
+  
+    test("should return 200 and all categories when successful", async () => {
+      const req = () => {};
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn().mockReturnThis()
+      };
+    
+      await categoryControlller(req, res);
+  
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith({
+        success: true,
+        message: "All Categories List",
+        category: [
+            {_id: 1, name: "Category A", slug: "categoryA"},
+            {_id: 2, name: "Category B", slug: "categoryB"}
+        ],
+      });
+    });
+
+    test("should return 200 when no categories when no categories exist", async () => {
+      const req = () => {};
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn().mockReturnThis()
+      };
+      categoryModel.find.mockReturnValue([]);
+    
+      await categoryControlller(req, res);
+  
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith({
+        success: true,
+        message: "All Categories List",
+        category: [],
+      });
+    });
+
+    test("should return 500 and when unsuccessful", async () => {
+      const req = () => {};
+      const res = {
+          status: jest.fn().mockReturnThis(),
+          send: jest.fn().mockReturnThis()
+      };
+
+      let mockError = new Error();
+      categoryModel.find.mockImplementation(() => {
+          throw mockError;
+      });
+  
+      await categoryControlller(req, res);
+  
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith({
+          success: false,
+          error: mockError,
+          message: "Error while getting all categories",
+      });
+    });
+  });
+
+  describe("singleCategoryController", () => {
+    beforeEach(() => {
+      categoryModel.findOne.mockReturnValue(
+        {_id: 3, name: "Category C", slug: "categoryC"},
+    );
+    })
+  
+    test("should return 200 when the category is successfully returned", async () => {
+      const req = {params: {slug: "categoryC"}};
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn().mockReturnThis()
+      };
+    
+      await singleCategoryController(req, res);
+  
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.send).toHaveBeenCalledWith({
+        success: true,
+        message: "Get SIngle Category SUccessfully",
+        category: {_id: 3, name: "Category C", slug: "categoryC"}
+      });
+    });
+
+    test("should return 400 and when the category is not found", async () => {
+      const req = {params: {slug: "categoryC"}};
+      const res = {
+          status: jest.fn().mockReturnThis(),
+          send: jest.fn().mockReturnThis()
+      };
+      categoryModel.findOne.mockReturnValue(null);
+  
+      await singleCategoryController(req, res);
+  
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith({
+          success: false,
+          error: mockError,
+          message: "Error While getting Single Category",
+      });
+    });
+  
+    test("should return 500 and when unsuccessful", async () => {
+        const req = {params: {slug: "categoryC"}};
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn().mockReturnThis()
+        };
+  
+        let mockError = new Error();
+        categoryModel.findOne.mockImplementation(() => {
+            throw mockError;
+        });
+    
+        await singleCategoryController(req, res);
+    
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.send).toHaveBeenCalledWith({
+            success: false,
+            error: mockError,
+            message: "Error While getting Single Category",
+        });
+      });
   });
