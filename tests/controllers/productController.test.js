@@ -11,11 +11,10 @@ import {
   productListController,
   braintreeTokenController,
 } from "../../controllers/productController";
-//import productModel from '../../models/productModel';
 import fs from 'fs';
 import slugify from 'slugify';
+
 import productModel from "../../models/productModel";
-//import braintree from "braintree";import productModel from "../../models/productModel";
 import categoryModel from "../../models/categoryModel";
 import braintree from "braintree";
 
@@ -73,11 +72,14 @@ jest.mock("../../models/productModel.js", () => {
     })),
   })),
   findById: jest.fn(),
-    save: mockSave,
+}});
+
+// Mock the categoryModel
+jest.mock("../../models/categoryModel.js", () => ({
+  findOne: jest.fn(),
     findByIdAndDelete: jest.fn(),
     default: jest.fn(),
-  };
-});
+  }));
     
 
 // Mock the categoryModel
