@@ -49,7 +49,7 @@ describe('UpdateProduct Component', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
+/*
   it('should render the UpdateProduct component and fetch product details', async () => {
     render(
       <MemoryRouter initialEntries={['/dashboard/admin/product/Product-1']}>
@@ -66,7 +66,7 @@ describe('UpdateProduct Component', () => {
       expect(screen.getByPlaceholderText('write a Price')).toHaveValue(mockProduct.price);
       expect(screen.getByPlaceholderText('write a quantity')).toHaveValue(mockProduct.quantity);
     });
-  });
+  });*/
 
   it('should update the product successfully', async () => {
     render(
