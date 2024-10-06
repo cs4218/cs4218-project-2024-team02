@@ -14,11 +14,10 @@ import {
 import productModel from "../../models/productModel";
 import categoryModel from "../../models/categoryModel";
 import braintree from "braintree";
-//import productModel from '../../models/productModel';
 import fs from 'fs';
 import slugify from 'slugify';
-import productModel from "../../models/productModel";
-//import braintree from "braintree";
+
+
 // kong
 
 // cheng
@@ -73,16 +72,14 @@ jest.mock("../../models/productModel.js", () => {
     })),
   })),
   findById: jest.fn(),
-}));
+}});
 
 // Mock the categoryModel
 jest.mock("../../models/categoryModel.js", () => ({
   findOne: jest.fn(),
-    save: mockSave,
     findByIdAndDelete: jest.fn(),
     default: jest.fn(),
-  };
-});
+  }));
     
 
 describe("getProductController", () => {
