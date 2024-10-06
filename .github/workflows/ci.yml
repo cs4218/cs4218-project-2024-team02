@@ -53,14 +53,13 @@ jobs:
       - name: Install dependencies on frontend
         run: cd client && npm install
 
-      # Step 4: Set up environment variables from GitHub Secrets
-    #   - name: Setup environment variables
-    #     run: |
-    #       echo "NODE_ENV=production" >> $GITHUB_ENV
-    #       echo "API_KEY=${{ secrets.API_KEY }}"
-    #       echo "API_KEY=${{ secrets.API_KEY }}" >> $GITHUB_ENV
-    #       echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
-    #       echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+    #   Step 4: Set up environment variables from GitHub Secrets
+      - name: Setup environment variables
+        run: |
+          echo "BRAINTREE_MERCHANT_ID=hmrc3kfrt2xrvtvp" >> $GITHUB_ENV
+          echo "BRAINTREE_PUBLIC_KEY=d3rnqcjwn7zk4fpt" >> $GITHUB_ENV
+          echo "BRAINTREE_PRIVATE_KEY=767ed9ddd903781349d4c2af441f8eaa" >> $GITHUB_ENV
+
       # Step 5: Run tests
       - name: Run tests
         run: npm test
