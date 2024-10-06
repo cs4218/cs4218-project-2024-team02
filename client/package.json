@@ -3,6 +3,8 @@
   "proxy": "http://localhost:6060",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -43,6 +45,22 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom",
+    "transform": {
+      "\\.js$": "<rootDir>/node_modules/babel-jest"
+    },
+    "moduleNameMapper": {
+      "^react$": "<rootDir>/node_modules/react/index.js",
+      "^.+\\.(css|less)$": "<rootDir>/config/CSSStub.js"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(styleMock\\.js)$)"
+    ],
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
     ]
   }
 }
