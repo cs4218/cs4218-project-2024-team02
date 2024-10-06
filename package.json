@@ -38,6 +38,7 @@
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-react": "^7.24.1",
     "@playwright/test": "^1.44.0",
+    "@testing-library/react": "^16.0.1",
     "@types/jest": "^29.5.13",
     "@types/node": "^20.12.12",
     "babel-jest": "^29.7.0",
@@ -52,11 +53,14 @@
       "\\.js$": "<rootDir>/node_modules/babel-jest"
     },
     "moduleNameMapper": {
-      "\\.(css|scss)$": "identity-obj-proxy"
+      "^react$": "<rootDir>/node_modules/react/index.js",
+      "^.+\\.(css|less)$": "<rootDir>/config/CSSStub.js"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!(styleMock\\.js)$)"
     ],
-    "setupFilesAfterEnv": ["./jest.setup.js"]
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ]
   }
 }
