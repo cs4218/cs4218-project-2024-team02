@@ -11,12 +11,12 @@ import {
   productListController,
   braintreeTokenController,
 } from "../../controllers/productController";
-import fs from 'fs';
-import slugify from 'slugify';
-
 import productModel from "../../models/productModel";
 import categoryModel from "../../models/categoryModel";
 import braintree from "braintree";
+import fs from 'fs';
+import slugify from 'slugify';
+
 
 // kong
 
@@ -81,11 +81,6 @@ jest.mock("../../models/categoryModel.js", () => ({
     default: jest.fn(),
   }));
     
-
-// Mock the categoryModel
-jest.mock("../../models/categoryModel.js", () => ({
-  findOne: jest.fn(),
-}));
 
 describe("getProductController", () => {
   const mockRequest = () => {};
