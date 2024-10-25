@@ -67,6 +67,13 @@
     ],
     "setupFilesAfterEnv": [
       "./jest.setup.js"
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": ["lcov", "text", "cobertura"],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}", 
+      "!**/node_modules/**" 
     ]
   }
 }
