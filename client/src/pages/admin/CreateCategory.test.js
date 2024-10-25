@@ -25,7 +25,7 @@ describe('CreateCategory Component', () => {
     jest.clearAllMocks();
   });
 
-  /*
+  
   it('should render the CreateCategory component correctly', async () => {
     render(
         <Router>
@@ -39,7 +39,7 @@ describe('CreateCategory Component', () => {
 
     // Wait for categories to be fetched and displayed
     await screen.findByText('Category 1');
-  });*/
+  });
 
   it('should handle category creation', async () => {
     axios.post.mockResolvedValue({
