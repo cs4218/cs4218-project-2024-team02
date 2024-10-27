@@ -85,7 +85,7 @@ const mockEmptyProducts = {
 
 const mockEmptyProductCount = { data: { total: 0 }};
 
-describe('HomePage Component', () => {
+describe('HomePage Component Unit Tests', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         useCart.mockReturnValue([[], jest.fn()]);
@@ -377,4 +377,28 @@ describe('HomePage Component', () => {
         expect(localStorage.setItem).toHaveBeenCalledWith("cart", JSON.stringify([mockProducts.data.products[0]]));
         expect(toast.success).toHaveBeenCalledWith("Item Added to cart");
     });
+});
+
+describe("HomePage Integration Tests", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        useCart.mockReturnValue([[], jest.fn()]);
+    });
+
+    test("HomePage successfully renders Layout component", async () => {
+
+        render(
+            <BrowserRouter>
+                <HomePage />
+            </BrowserRouter>
+        );
+
+        const bannerImage = screen.getByRole('img', {name: /bannerimage/i});
+        expect(bannerImage).toBeInTheDocument(); 
+        expect(bannerImage).toHaveAttribute('alt', 'bannerimage');
+        expect(bannerImage).toHaveAttribute('src', '/images/Virtual.png');
+        expect(bannerImage).toHaveAttribute('width', '100%');
+
+    });
+
 });
