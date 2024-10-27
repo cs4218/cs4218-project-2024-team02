@@ -49,7 +49,7 @@ describe('UpdateProduct Component', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-/*
+
   it('should render the UpdateProduct component and fetch product details', async () => {
     render(
       <MemoryRouter initialEntries={['/dashboard/admin/product/Product-1']}>
@@ -66,7 +66,7 @@ describe('UpdateProduct Component', () => {
       expect(screen.getByPlaceholderText('write a Price')).toHaveValue(mockProduct.price);
       expect(screen.getByPlaceholderText('write a quantity')).toHaveValue(mockProduct.quantity);
     });
-  });*/
+  });
 
   it('should update the product successfully', async () => {
     render(
@@ -105,6 +105,8 @@ describe('UpdateProduct Component', () => {
       expect(axios.delete).toHaveBeenCalled();//.toHaveBeenCalledWith('/api/v1/product/delete-product/123'); // Ensure correct ID is used
       expect(toast.success).toHaveBeenCalledWith('Product DEleted Succfully');
     });
+
+    expect(axios.delete).toHaveBeenCalledWith('/api/v1/product/delete-product/');
   });
 
   it('should handle error when fetching categories', async () => {
@@ -118,4 +120,34 @@ describe('UpdateProduct Component', () => {
 
     await waitFor(() => expect(toast.error).toHaveBeenCalledWith('Something wwent wrong in getting catgeory'));
   });
+
+  //integration tests
+  it('should delete a product and update the list', async () => {
+    const productData = [{ _id: '1', name: 'Existing Product' }];
+    axios.get.mockResolvedValueOnce({
+      data: { success: true, products: productData },
+    });
+
+    axios.delete.mockResolvedValueOnce({
+      data: { success: true },
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/dashboard/admin/product/Product-1']}>
+        <UpdateProduct />
+      </MemoryRouter>
+    );
+
+    // Click the delete button
+    fireEvent.click(screen.getByText('DELETE PRODUCT'));
+
+    await waitFor(() => {
+      expect(axios.delete).toHaveBeenCalled();//.toHaveBeenCalledWith('/api/v1/product/delete-product/123'); // Ensure correct ID is used
+      expect(toast.success).toHaveBeenCalledWith('Product DEleted Succfully');
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+      expect(screen.queryByText('Existing Product')).not.toBeInTheDocument();
+    });
+
+    expect(axios.delete).toHaveBeenCalledWith('/api/v1/product/delete-product/');
+});
 });

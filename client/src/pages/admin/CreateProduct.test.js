@@ -71,6 +71,10 @@ describe('CreateProduct Component', () => {
     // Open the select dropdown
     fireEvent.mouseDown(screen.getByText('Select a category'));
 
+    // Wait for the options to appear
+    await waitFor(() => {
+      expect(screen.getByText('Electronics')).toBeInTheDocument();
+    });
     // Get all elements matching "Electronics"
     const options = await screen.findAllByText('Electronics');
 
@@ -105,4 +109,80 @@ describe('CreateProduct Component', () => {
     // Assert that the product creation function was called
     expect(axios.post).toHaveBeenCalledWith('/api/v1/product/create-product', expect.any(FormData));
   });*/
+
+  it('should display the created product in the product list', async () => {
+    // Mock product creation
+    axios.post.mockResolvedValueOnce({
+      data: { success: true,
+        category: [{ _id: '1', name: 'Electronics' }],
+       },
+    });
+
+    // Mock the response for retrieving products after creation
+    axios.get.mockResolvedValue({
+      data: { success: true, products: [{ _id: '1', name: 'Test Product' }], category: [{ _id: '1', name: 'Electronics' }],},
+    });
+
+    render(
+      <Router>
+        <CreateProduct />
+      </Router>
+    );
+
+    // Fill in the form fields
+    fireEvent.change(screen.getByPlaceholderText('write a name'), { target: { value: 'Test Product' } });
+    fireEvent.change(screen.getByPlaceholderText('write a description'), { target: { value: 'Test Description' } });
+    fireEvent.change(screen.getByPlaceholderText('write a Price'), { target: { value: '100' } });
+    fireEvent.change(screen.getByPlaceholderText('write a quantity'), { target: { value: '10' } });
+    // Open the select dropdown
+    fireEvent.mouseDown(screen.getByText('Select a category'));
+
+    // Wait for the options to appear
+    await waitFor(() => {
+      expect(screen.getByText('Electronics')).toBeInTheDocument();
+    });
+
+    // Get all elements matching "Electronics"
+    const options = await screen.findAllByText('Electronics');
+
+    // Click the second "Electronics" element (if you have multiple entries)
+    fireEvent.click(options[0]); // Use options[0] for the first instance
+
+    // Simulate creating the product
+    fireEvent.click(screen.getByRole('button', { name: /CREATE PRODUCT/i }));
+
+    await waitFor(() => expect(toast.success).toHaveBeenCalledWith('Product Created Successfully'));
+
+    // Mocking the second fetch to return the updated product list
+    axios.get.mockResolvedValueOnce({
+      data: { success: true, products: [{ _id: '1', name: 'Test Product' }, { _id: '2', name: 'New Product' }] },
+    });
+
+    // Wait for the new product to be displayed
+    await waitFor(() => {
+      expect(screen.getByText('Test Product')).toBeInTheDocument();
+    });
+
+    // Verify that the correct API calls were made
+    expect(axios.get).toHaveBeenCalledTimes(2); // Ensure get was called twice
+  });
+
+  //not supposed to pass, ui shows a 'login successfully' toast instead
+  it('should handle product creation error', async () => {
+    axios.post.mockRejectedValueOnce(new Error('Network Error'));
+
+    render(
+      <Router>
+        <CreateProduct />
+      </Router>
+    );
+
+    // Simulate creating the product
+    fireEvent.click(screen.getByRole('button', { name: /CREATE PRODUCT/i }));
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('something went wrong'));
+
+    // Assert that the product creation function was called
+    expect(axios.post).toHaveBeenCalledWith('/api/v1/product/create-product', expect.any(FormData));
+  });
 });

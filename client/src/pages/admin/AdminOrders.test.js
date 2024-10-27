@@ -43,7 +43,7 @@ describe('AdminOrders Component', () => {
   afterEach(() => {
     jest.clearAllMocks(); // Clear mocks after each test
   });
-/*
+
   it('renders AdminOrders with orders', async () => {
     render(
         <Router>
@@ -65,7 +65,7 @@ describe('AdminOrders Component', () => {
       expect(screen.getByText('Product 1')).toBeInTheDocument();
       expect(screen.getByText('Price : 100')).toBeInTheDocument();
     });
-  });*/
+  });
 
   it('updates order status when changed', async () => {
     render(

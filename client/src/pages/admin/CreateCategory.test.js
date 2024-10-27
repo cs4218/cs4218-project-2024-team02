@@ -25,7 +25,7 @@ describe('CreateCategory Component', () => {
     jest.clearAllMocks();
   });
 
-  /*
+  
   it('should render the CreateCategory component correctly', async () => {
     render(
         <Router>
@@ -39,7 +39,7 @@ describe('CreateCategory Component', () => {
 
     // Wait for categories to be fetched and displayed
     await screen.findByText('Category 1');
-  });*/
+  });
 
   it('should handle category creation', async () => {
     axios.post.mockResolvedValue({
@@ -115,6 +115,67 @@ describe('CreateCategory Component', () => {
     await waitFor(() => expect(toast.success).toHaveBeenCalledWith('category is deleted'));
 
     // Assert that the delete function was called
+    expect(axios.delete).toHaveBeenCalledWith('/api/v1/category/delete-category/1');
+  });
+
+
+  // Integration Tests
+  it('should create a new category and display it in the list', async () => {
+    axios.post.mockResolvedValueOnce({
+      data: { success: true },
+    });
+    
+
+    render(
+      <Router>
+        <CreateCategory />
+      </Router>
+    );
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'New Category' } });
+    fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('New Category is created');
+    });
+    // Mock the retrieval of categories after a new category is created
+    
+    expect(axios.get).toHaveBeenCalledTimes(2);
+    expect(axios.post).toHaveBeenCalledWith('/api/v1/category/create-category', { name: 'New Category' });
+    
+    await waitFor(() => {
+      expect(screen.getByText('New Category')).toBeInTheDocument();
+    });
+  });
+
+  it('should delete a category and update the list', async () => {
+    const categoryData = [{ _id: '1', name: 'Existing Category' }];
+    axios.get.mockResolvedValueOnce({
+      data: { success: true, category: categoryData },
+    });
+
+    axios.delete.mockResolvedValueOnce({
+      data: { success: true },
+    });
+
+    render(
+      <Router>
+        <CreateCategory />
+      </Router>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Existing Category')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Delete'));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('category is deleted');
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+      expect(screen.queryByText('Existing Category')).not.toBeInTheDocument();
+    });
+
     expect(axios.delete).toHaveBeenCalledWith('/api/v1/category/delete-category/1');
   });
 });
